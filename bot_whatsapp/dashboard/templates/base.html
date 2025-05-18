@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AdminHub - Modern Dashboard Template">
+    <title>AdminHub - {% block title %}{% endblock %}</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAJESURBVFhH7ZbPaxNBFMff28TUkoCmJhQrIgUPilB78KAHoVVRiiBCEQ+CJ0E8efAiePEiCN704EHwIHjxIII/QP+AghSxthTBUyMYqYqYtGnMJtnd8c1mm5jN7GST3VyED3zYmTfv+30z82Z2E+OfxxFPE5qmxXD4BK4EL5kGr+GqwTm/xzk/xDlfxzFhwXGcr5h3qcqLB0lnkpyT0Wh0CgVuEkKmcS6Fc8kgTvE8z7Vt+xG+5zG9BoR4BCFyhmFc1HV9BufSIFkc5/NYNkMI2cEqHmiaNoL5p3B9AoR4EKxz5XI5q+v6KK6HQTifgBgLQhzC+Rhz6Qf8rVarR7G8z4gQD4L1YrF4EtcfQYhJEGIBhFiEEFcgxCoIcQOE2AQhtkCIbRBiF4TYByGOQIgKCFGDEHUQooHxN0CIJgjRwvgbIEQLhGiDEB0Qwg3iuQEhXBDCAyF6IIQPQoQgBIUQFEJQCMEgBIMQFEJQCEEhBIUQFEJQCEEhBIUQFEJQCEEhBIUQFEJQCEEhBIUQFEJQCEEhBIUQFEJQCEEhBIUQFEJQCEEhBIUQFEJQCEEhBIUQFEJQCEEhBIUQFEJQCEEhBIUQFEJQCEEhBIUQFEJQCEEhBIUQFEJQCEEhBIUQFEJQCEEhBIUQFEJQCEEhBIUQFEJQCEEhBIUQFEJQCEEhBIUQFEJQCEEhBIUQFEJQCEEhBIUQFEJQCEEhBIUQFEJQCEEhBIUQFEJQCEEhBIUQ9L8XgpA/qwPqnlTGKFUAAAAASUVORK5CYII=">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#0f172a',
+                        secondary: '#64748b',
+                    },
+                    spacing: {
+                        '72': '18rem',
+                        '84': '21rem',
+                        '96': '24rem',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Custom scrollbar styles */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen flex" x-data="{ sidebarOpen: window.innerWidth >= 1024 }" @resize.window="sidebarOpen = window.innerWidth >= 1024">
+        <!-- Mobile Sidebar Overlay -->
+        <div 
+            x-show="sidebarOpen" 
+            @click="sidebarOpen = false" 
+            class="fixed inset-0 z-20 bg-black bg-opacity-50 transition-opacity lg:hidden"
+            x-cloak>
+        </div>
+
+        <!-- Sidebar -->
+        <div 
+            x-show="sidebarOpen"
+            class="fixed inset-y-0 left-0 z-30 w-64 transform transition duration-300 lg:transform-none lg:relative"
+            x-cloak>
+            {% include 'components/sidebar.html' %}
+        </div>
+
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Mobile Header -->
+            <div class="lg:hidden bg-white h-16 flex items-center px-4 border-b">
+                <button @click="sidebarOpen = true" class="text-gray-500 hover:text-gray-600">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+                <span class="ml-4 text-lg font-semibold">AdminHub</span>
+            </div>
+
+            <!-- Navbar -->
+            {% include 'components/navbar.html' %}
+
+            <!-- Main Content -->
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
+                {% csrf_token %}
+                <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                    {% block content %}{% endblock %}
+                </div>
+            </main>
+        </div>
+    </div>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
